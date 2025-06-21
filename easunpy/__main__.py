@@ -70,7 +70,6 @@ def create_dashboard(inverter_data: InverterData, status_message: str | Text = "
     if inverter_data.battery:
         battery_table.add_row("Voltage", f"{inverter_data.battery.voltage:.1f}V")
         battery_table.add_row("Current", f"{inverter_data.battery.current:.1f}A")
-        battery_table.add_row("Average Current", f"{inverter_data.battery.av_current:.1f}A")
         battery_table.add_row("Power", f"{inverter_data.battery.power}W")
         battery_table.add_row("State of Charge", f"{inverter_data.battery.soc}%")
         battery_table.add_row("Temperature", f"{inverter_data.battery.temperature}°C")
@@ -193,7 +192,6 @@ async def print_single_update(inverter_data: InverterData):
         console.print("\n[bold]Battery Status")
         console.print(f"Voltage: {inverter_data.battery.voltage:.1f}V")
         console.print(f"Current: {inverter_data.battery.current:.1f}A")
-        console.print(f"Average Current: {inverter_data.battery.av_current:.1f}A")
         console.print(f"Power: {inverter_data.battery.power}W")
         console.print(f"State of Charge: {inverter_data.battery.soc}%")
         console.print(f"Temperature: {inverter_data.battery.temperature}°C")

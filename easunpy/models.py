@@ -7,7 +7,6 @@ from typing import Dict, Optional, Callable, Any
 class BatteryData:
     voltage: float
     current: float
-    av_current: float
     power: int
     soc: int
     temperature: int
@@ -135,7 +134,6 @@ ISOLAR_SMG_II_6K = ModelConfig(
         "operation_mode": RegisterConfig(201),
         "battery_voltage": RegisterConfig(215, 0.1),
         "battery_current": RegisterConfig(216, 0.1),
-        "battery_av_current": RegisterConfig(232, 0.1),
         "battery_power": RegisterConfig(217),
         "battery_soc": RegisterConfig(229),
         "battery_temperature": RegisterConfig(226),  # Using DCDC temperature

@@ -144,11 +144,10 @@ class AsyncISolar:
     def _create_battery_data(self, values: Dict[str, Any]) -> Optional[BatteryData]:
         """Create BatteryData object from processed values."""
         try:
-            if all(key in values for key in ["battery_voltage", "battery_current", "battery_av_current", "battery_power", "battery_soc", "battery_temperature"]):
+            if all(key in values for key in ["battery_voltage", "battery_current", "battery_power", "battery_soc", "battery_temperature"]):
                 return BatteryData(
                     voltage=values["battery_voltage"],
                     current=values["battery_current"],
-                    av_current=values["battery_av_current"],
                     power=values["battery_power"],
                     soc=values["battery_soc"],
                     temperature=values["battery_temperature"]
