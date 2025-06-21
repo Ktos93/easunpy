@@ -7,6 +7,7 @@ from typing import Dict, Optional, Callable, Any
 class BatteryData:
     voltage: float
     current: float
+    av_current: float
     power: int
     soc: int
     temperature: int
@@ -123,8 +124,8 @@ ISOLAR_SMG_II_11K = ModelConfig(
         "time_register_3": RegisterConfig(699, processor=int),  # Hour
         "time_register_4": RegisterConfig(700, processor=int),  # Minute
         "time_register_5": RegisterConfig(701, processor=int),  # Second
-        "pv_energy_today": RegisterConfig(702, 0.01),
-        "pv_energy_total": RegisterConfig(703, 0.01),
+        # "pv_energy_today": RegisterConfig(702, 0.01),
+        # "pv_energy_total": RegisterConfig(703, 0.01),
     }
 )
 
@@ -134,6 +135,7 @@ ISOLAR_SMG_II_6K = ModelConfig(
         "operation_mode": RegisterConfig(201),
         "battery_voltage": RegisterConfig(215, 0.1),
         "battery_current": RegisterConfig(216, 0.1),
+        "battery_av_current": RegisterConfig(232, 0.1),
         "battery_power": RegisterConfig(217),
         "battery_soc": RegisterConfig(229),
         "battery_temperature": RegisterConfig(226),  # Using DCDC temperature
@@ -144,11 +146,11 @@ ISOLAR_SMG_II_6K = ModelConfig(
         "pv1_voltage": RegisterConfig(219, 0.1),
         "pv1_current": RegisterConfig(220, 0.1),
         "pv1_power": RegisterConfig(223),
-        "pv2_voltage": RegisterConfig(0),  # Not supported
-        "pv2_current": RegisterConfig(0),  # Not supported
-        "pv2_power": RegisterConfig(0),    # Not supported
+        # "pv2_voltage": RegisterConfig(0),  # Not supported
+        # "pv2_current": RegisterConfig(0),  # Not supported
+        # "pv2_power": RegisterConfig(0),    # Not supported
         "grid_voltage": RegisterConfig(202, 0.1),
-        "grid_current": RegisterConfig(0),  # Not available
+        # "grid_current": RegisterConfig(0),  # Not available
         "grid_power": RegisterConfig(204),
         "grid_frequency": RegisterConfig(203),
         "output_voltage": RegisterConfig(210, 0.1),
@@ -157,14 +159,14 @@ ISOLAR_SMG_II_6K = ModelConfig(
         "output_apparent_power": RegisterConfig(214),
         "output_load_percentage": RegisterConfig(225, 0.01),
         "output_frequency": RegisterConfig(212),
-        "time_register_0": RegisterConfig(696, processor=int),  # Year
-        "time_register_1": RegisterConfig(697, processor=int),  # Month
-        "time_register_2": RegisterConfig(698, processor=int),  # Day
-        "time_register_3": RegisterConfig(699, processor=int),  # Hour
-        "time_register_4": RegisterConfig(700, processor=int),  # Minute
-        "time_register_5": RegisterConfig(701, processor=int),  # Second
-        "pv_energy_today": RegisterConfig(0),  # Not supported
-        "pv_energy_total": RegisterConfig(0),  # Not supported
+        # "time_register_0": RegisterConfig(0, processor=int),  # Year
+        # "time_register_1": RegisterConfig(0, processor=int),  # Month
+        # "time_register_2": RegisterConfig(0, processor=int),  # Day
+        # "time_register_3": RegisterConfig(0, processor=int),  # Hour
+        # "time_register_4": RegisterConfig(0, processor=int),  # Minute
+        # "time_register_5": RegisterConfig(0, processor=int),  # Second
+        # "pv_energy_today": RegisterConfig(0),  # Not supported
+        # "pv_energy_total": RegisterConfig(0),  # Not supported
     }
 )
 

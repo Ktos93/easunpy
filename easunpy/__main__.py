@@ -70,6 +70,7 @@ def create_dashboard(inverter_data: InverterData, status_message: str | Text = "
     if inverter_data.battery:
         battery_table.add_row("Voltage", f"{inverter_data.battery.voltage:.1f}V")
         battery_table.add_row("Current", f"{inverter_data.battery.current:.1f}A")
+        battery_table.add_row("Average Current", f"{inverter_data.battery.av_current:.1f}A")
         battery_table.add_row("Power", f"{inverter_data.battery.power}W")
         battery_table.add_row("State of Charge", f"{inverter_data.battery.soc}%")
         battery_table.add_row("Temperature", f"{inverter_data.battery.temperature}°C")
@@ -79,33 +80,15 @@ def create_dashboard(inverter_data: InverterData, status_message: str | Text = "
     pv_table.add_column("Value")
     
     if inverter_data.pv:
-        # Add basic PV data with null checks
-        if inverter_data.pv.total_power is not None:
-            pv_table.add_row("Total Power", f"{inverter_data.pv.total_power}W")
-        if inverter_data.pv.charging_power is not None:
-            pv_table.add_row("Charging Power", f"{inverter_data.pv.charging_power}W")
-        if inverter_data.pv.charging_current is not None:
-            pv_table.add_row("Charging Current", f"{inverter_data.pv.charging_current:.1f}A")
-        if inverter_data.pv.pv1_voltage is not None:
-            pv_table.add_row("PV1 Voltage", f"{inverter_data.pv.pv1_voltage:.1f}V")
-        if inverter_data.pv.pv1_current is not None:
-            pv_table.add_row("PV1 Current", f"{inverter_data.pv.pv1_current:.1f}A")
-        if inverter_data.pv.pv1_power is not None:
-            pv_table.add_row("PV1 Power", f"{inverter_data.pv.pv1_power}W")
-        
-        # Only show PV2 data if it's supported and not None
-        if inverter_data.pv.pv2_voltage is not None and inverter_data.pv.pv2_voltage > 0:
-            pv_table.add_row("PV2 Voltage", f"{inverter_data.pv.pv2_voltage:.1f}V")
-            if inverter_data.pv.pv2_current is not None:
-                pv_table.add_row("PV2 Current", f"{inverter_data.pv.pv2_current:.1f}A")
-            if inverter_data.pv.pv2_power is not None:
-                pv_table.add_row("PV2 Power", f"{inverter_data.pv.pv2_power}W")
-        
-        # Only show generated energy if supported and not None
-        if inverter_data.pv.pv_generated_today is not None and inverter_data.pv.pv_generated_today > 0:
-            pv_table.add_row("Generated Today", f"{inverter_data.pv.pv_generated_today:.2f}kWh")
-        if inverter_data.pv.pv_generated_total is not None and inverter_data.pv.pv_generated_total > 0:
-            pv_table.add_row("Generated Total", f"{inverter_data.pv.pv_generated_total:.2f}kWh")
+        pv_table.add_row("Total Power", f"{inverter_data.pv.total_power}W")
+        pv_table.add_row("Charging Power", f"{inverter_data.pv.charging_power}W")
+        pv_table.add_row("Charging Current", f"{inverter_data.pv.charging_current:.1f}A")
+        pv_table.add_row("PV1 Voltage", f"{inverter_data.pv.pv1_voltage:.1f}V")
+        pv_table.add_row("PV1 Current", f"{inverter_data.pv.pv1_current:.1f}A")
+        pv_table.add_row("PV1 Power", f"{inverter_data.pv.pv1_power}W")
+        # pv_table.add_row("PV2 Voltage", f"{inverter_data.pv.pv2_voltage:.1f}V")
+        # pv_table.add_row("PV2 Current", f"{inverter_data.pv.pv2_current:.1f}A")
+        # pv_table.add_row("PV2 Power", f"{inverter_data.pv.pv2_power}W")
 
     grid_output_table = Table(title="Grid & Output Status")
     grid_output_table.add_column("Parameter")
@@ -208,54 +191,35 @@ async def print_single_update(inverter_data: InverterData):
 
     if inverter_data.battery:
         console.print("\n[bold]Battery Status")
-        if inverter_data.battery.voltage is not None:
-            console.print(f"Voltage: {inverter_data.battery.voltage:.1f}V")
-        if inverter_data.battery.current is not None:
-            console.print(f"Current: {inverter_data.battery.current:.1f}A")
-        if inverter_data.battery.power is not None:
-            console.print(f"Power: {inverter_data.battery.power}W")
-        if inverter_data.battery.soc is not None:
-            console.print(f"State of Charge: {inverter_data.battery.soc}%")
-        if inverter_data.battery.temperature is not None:
-            console.print(f"Temperature: {inverter_data.battery.temperature}°C")
+        console.print(f"Voltage: {inverter_data.battery.voltage:.1f}V")
+        console.print(f"Current: {inverter_data.battery.current:.1f}A")
+        console.print(f"Average Current: {inverter_data.battery.av_current:.1f}A")
+        console.print(f"Power: {inverter_data.battery.power}W")
+        console.print(f"State of Charge: {inverter_data.battery.soc}%")
+        console.print(f"Temperature: {inverter_data.battery.temperature}°C")
 
     if inverter_data.pv:
         console.print("\n[bold]Solar Status")
-        if inverter_data.pv.total_power is not None:
-            console.print(f"Total Power: {inverter_data.pv.total_power}W")
-        if inverter_data.pv.charging_power is not None:
-            console.print(f"Charging Power: {inverter_data.pv.charging_power}W")
-        if inverter_data.pv.pv1_voltage is not None and inverter_data.pv.pv1_current is not None and inverter_data.pv.pv1_power is not None:
-            console.print(f"PV1: {inverter_data.pv.pv1_voltage:.1f}V, {inverter_data.pv.pv1_current:.1f}A, {inverter_data.pv.pv1_power}W")
-        if inverter_data.pv.pv2_voltage is not None and inverter_data.pv.pv2_voltage > 0:
-            if inverter_data.pv.pv2_current is not None and inverter_data.pv.pv2_power is not None:
-                console.print(f"PV2: {inverter_data.pv.pv2_voltage:.1f}V, {inverter_data.pv.pv2_current:.1f}A, {inverter_data.pv.pv2_power}W")
-        if inverter_data.pv.pv_generated_today is not None and inverter_data.pv.pv_generated_today > 0:
-            console.print(f"Generated Today: {inverter_data.pv.pv_generated_today:.2f}kWh")
-        if inverter_data.pv.pv_generated_total is not None and inverter_data.pv.pv_generated_total > 0:
-            console.print(f"Generated Total: {inverter_data.pv.pv_generated_total:.2f}kWh")
+        console.print(f"Total Power: {inverter_data.pv.total_power}W")
+        console.print(f"Charging Power: {inverter_data.pv.charging_power}W")
+        console.print(f"PV1: {inverter_data.pv.pv1_voltage:.1f}V, {inverter_data.pv.pv1_current:.1f}A, {inverter_data.pv.pv1_power}W")
+        # console.print(f"PV2: {inverter_data.pv.pv2_voltage:.1f}V, {inverter_data.pv.pv2_current:.1f}A, {inverter_data.pv.pv2_power}W")
+        console.print(f"Generated Today: {inverter_data.pv.pv_generated_today:.2f}kWh")
+        console.print(f"Generated Total: {inverter_data.pv.pv_generated_total:.2f}kWh")
 
     if inverter_data.grid:
         console.print("\n[bold]Grid Status")
-        if inverter_data.grid.voltage is not None:
-            console.print(f"Voltage: {inverter_data.grid.voltage:.1f}V")
-        if inverter_data.grid.power is not None:
-            console.print(f"Power: {inverter_data.grid.power}W")
-        if inverter_data.grid.frequency is not None:
-            console.print(f"Frequency: {inverter_data.grid.frequency/100:.2f}Hz")
+        console.print(f"Voltage: {inverter_data.grid.voltage:.1f}V")
+        console.print(f"Power: {inverter_data.grid.power}W")
+        console.print(f"Frequency: {inverter_data.grid.frequency/100:.2f}Hz")
 
     if inverter_data.output:
         console.print("\n[bold]Output Status")
-        if inverter_data.output.voltage is not None:
-            console.print(f"Voltage: {inverter_data.output.voltage:.1f}V")
-        if inverter_data.output.current is not None:
-            console.print(f"Current: {inverter_data.output.current:.1f}A")
-        if inverter_data.output.power is not None:
-            console.print(f"Power: {inverter_data.output.power}W")
-        if inverter_data.output.load_percentage is not None:
-            console.print(f"Load: {inverter_data.output.load_percentage}%")
-        if inverter_data.output.frequency is not None:
-            console.print(f"Frequency: {inverter_data.output.frequency/100:.1f}Hz")
+        console.print(f"Voltage: {inverter_data.output.voltage:.1f}V")
+        console.print(f"Current: {inverter_data.output.current:.1f}A")
+        console.print(f"Power: {inverter_data.output.power}W")
+        console.print(f"Load: {inverter_data.output.load_percentage}%")
+        console.print(f"Frequency: {inverter_data.output.frequency/100:.1f}Hz")
 
 async def main():
     parser = argparse.ArgumentParser(description='Easun Inverter Monitor')

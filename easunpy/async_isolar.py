@@ -144,10 +144,11 @@ class AsyncISolar:
     def _create_battery_data(self, values: Dict[str, Any]) -> Optional[BatteryData]:
         """Create BatteryData object from processed values."""
         try:
-            if all(key in values for key in ["battery_voltage", "battery_current", "battery_power", "battery_soc", "battery_temperature"]):
+            if all(key in values for key in ["battery_voltage", "battery_current", "battery_av_current", "battery_power", "battery_soc", "battery_temperature"]):
                 return BatteryData(
                     voltage=values["battery_voltage"],
                     current=values["battery_current"],
+                    av_current=values["battery_av_current"],
                     power=values["battery_power"],
                     soc=values["battery_soc"],
                     temperature=values["battery_temperature"]
@@ -160,7 +161,7 @@ class AsyncISolar:
         """Create PVData object from processed values."""
         try:
             # Check if we have at least some PV data
-            if any(key in values for key in ["pv_total_power", "pv1_voltage", "pv2_voltage"]):
+            if any(key in values for key in ["pv_total_power", "pv1_voltage"]):
                 return PVData(
                     total_power=values.get("pv_total_power"),
                     charging_power=values.get("pv_charging_power"),
@@ -169,11 +170,11 @@ class AsyncISolar:
                     pv1_voltage=values.get("pv1_voltage"),
                     pv1_current=values.get("pv1_current"),
                     pv1_power=values.get("pv1_power"),
-                    pv2_voltage=values.get("pv2_voltage"),
-                    pv2_current=values.get("pv2_current"),
-                    pv2_power=values.get("pv2_power"),
-                    pv_generated_today=values.get("pv_energy_today"),
-                    pv_generated_total=values.get("pv_energy_total")
+                    # pv2_voltage=values.get("pv2_voltage"),
+                    # pv2_current=values.get("pv2_current"),
+                    # pv2_power=values.get("pv2_power"),
+                    # pv_generated_today=values.get("pv_energy_today"),
+                    # pv_generated_total=values.get("pv_energy_total")
                 )
         except Exception as e:
             logger.warning(f"Failed to create PVData: {e}")

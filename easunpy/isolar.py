@@ -65,8 +65,8 @@ class ISolar:
             pv1_voltage=pv1_data[5] / 10.0,
             pv1_current=pv1_data[6] / 10.0,
             pv1_power=pv1_data[7],
-            pv2_voltage=pv2_data[0] / 10.0,
-            pv2_current=pv2_data[1] / 10.0,
+            # pv2_voltage=pv2_data[0] / 10.0,
+            # pv2_current=pv2_data[1] / 10.0,
             pv2_power=pv2_data[2]
         )
 
